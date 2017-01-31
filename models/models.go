@@ -73,6 +73,7 @@ type ScanResult struct {
 
 	Packages PackageInfoList
 
+	Errors   []string
 	Optional [][]interface{}
 }
 

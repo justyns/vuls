@@ -34,11 +34,21 @@ func toScanSummary(rs ...models.ScanResult) string {
 	table.MaxColWidth = maxColWidth
 	table.Wrap = true
 	for _, r := range rs {
-		cols := []interface{}{
-			r.FormatServerName(),
-			fmt.Sprintf("%s%s", r.Family, r.Release),
-			fmt.Sprintf("%d CVEs", len(r.ScannedCves)),
-			r.Packages.ToUpdatablePacksSummary(),
+		var cols []interface{}
+		if len(r.Errors) == 0 {
+			cols = []interface{}{
+				r.FormatServerName(),
+				fmt.Sprintf("%s%s", r.Family, r.Release),
+				fmt.Sprintf("%d CVEs", len(r.ScannedCves)),
+				r.Packages.ToUpdatablePacksSummary(),
+			}
+		} else {
+			cols = []interface{}{
+				r.FormatServerName(),
+				"Error",
+				"",
+				"Run with --debug to view the details",
+			}
 		}
 		table.AddRow(cols...)
 	}
